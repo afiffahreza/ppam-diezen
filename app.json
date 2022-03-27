@@ -1,10 +1,4 @@
 {
-  "expo": {
-    "name": "ppam-diezen",
-    "slug": "ppam-diezen",
-    "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
-  }
+  "name": "diezen",
+  "displayName": "diezen"
 }
