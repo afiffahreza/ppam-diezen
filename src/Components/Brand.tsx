@@ -9,11 +9,15 @@ interface Props {
 }
 
 const Brand = ({ height, width, mode }: Props) => {
-  const { Layout, Images } = useTheme()
+  const { Layout } = useTheme()
 
   return (
     <View style={{ height, width }}>
-      <Image style={Layout.fullSize} source={Images.logo} resizeMode={mode} />
+      <Image
+        style={Layout.fullSize}
+        source={require('@/Assets/Images/diezen.png')}
+        resizeMode={mode}
+      />
     </View>
   )
 }
