@@ -6,6 +6,8 @@ import SplashScreen from "./pages/SplashScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Home from "./pages/Home";
+import Tracking from "./pages/Tracking";
 
 const Stack = createStackNavigator();
 
@@ -26,6 +28,16 @@ export default function App() {
         <Stack.Screen
           name="Register"
           component={Register}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Tracking"
+          component={Tracking}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

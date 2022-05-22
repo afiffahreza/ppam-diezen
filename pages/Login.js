@@ -90,7 +90,7 @@ export default function Login({ navigation }) {
               padding: 10,
               width: 400,
             }}
-            onPress={() => console.log("login google")}
+            onPress={() => navigation.navigate("Home")}
           >
             <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>
               Log In with Google
