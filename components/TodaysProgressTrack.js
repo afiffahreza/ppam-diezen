@@ -75,36 +75,36 @@ export default function TodaysProgressTrack({ navigation }) {
             </Text>
           </View>
           <View style={{ flex: 0.25, alignItems: "center" }}>
-            <Text style={{ fontSize: 15, marginBottom: 5 }}>Carb</Text>
             <Progress.Circle
-              size={70}
+              size={100}
               progress={0.3}
               thickness={10}
-              showsText={true}
               color={"#9B52AD"}
-              textStyle={{ fontSize: 20 }}
+              textStyle={{ fontSize: 15 }}
+              showsText={true}
+              formatText={(progress) => `Carb ${Math.round(progress * 100)}%`}
             />
           </View>
           <View style={{ flex: 0.25, alignItems: "center" }}>
-            <Text style={{ fontSize: 15, marginBottom: 5 }}>Protein</Text>
             <Progress.Circle
-              size={70}
-              progress={0.3}
+              size={100}
+              progress={0.4}
               thickness={10}
               showsText={true}
               color={"#3585FE"}
-              textStyle={{ fontSize: 20 }}
+              textStyle={{ fontSize: 15 }}
+              formatText={(progress) => `Prot ${Math.round(progress * 100)}%`}
             />
           </View>
           <View style={{ flex: 0.25, alignItems: "center" }}>
-            <Text style={{ fontSize: 15, marginBottom: 5 }}>Fat</Text>
             <Progress.Circle
-              size={70}
-              progress={0.3}
+              size={100}
+              progress={0.6}
               thickness={10}
               showsText={true}
               color={"#FEC635"}
-              textStyle={{ fontSize: 20 }}
+              textStyle={{ fontSize: 15 }}
+              formatText={(progress) => `Fat ${Math.round(progress * 100)}%`}
             />
           </View>
         </View>
