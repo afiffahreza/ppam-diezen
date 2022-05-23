@@ -109,10 +109,14 @@ export default function Home({ navigation }) {
                 </View>
 
                 <View style={{ flex: 0.33 }}>
-                  <Image
-                    source={require("../assets/icon/planning.png")}
-                    style={styles.icon}
-                  />
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Planning")}
+                  >
+                    <Image
+                      source={require("../assets/icon/planning.png")}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
                   <Text style={styles.iconText}>Planning</Text>
                 </View>
                 <View style={{ flex: 0.33 }}>

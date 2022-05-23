@@ -9,6 +9,8 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Tracking from "./pages/Tracking";
 import TrackingUpdate from "./pages/TrackingUpdate";
+import Planning from "./pages/Planning";
+import PlanTarget from "./pages/PlanTarget";
 
 const Stack = createStackNavigator();
 
@@ -44,6 +46,16 @@ export default function App() {
         <Stack.Screen
           name="TrackingUpdate"
           component={TrackingUpdate}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Planning"
+          component={Planning}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PlanTarget"
+          component={PlanTarget}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
