@@ -5,6 +5,7 @@ import {
   ImageBackground,
   Dimensions,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import Navbar from "../components/Navbar";

@@ -7,9 +7,56 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import firebase from "firebase";
 
 export default function Register({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+
+  const onSignUp = () => {
+    if (password == password2) {
+      // console.log("signing up");
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((result) => {
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(firebase.auth().currentUser.uid)
+            .set({
+              name,
+              email,
+              calories: "",
+              protein: "",
+              carbs: "",
+              fat: "",
+              weight: "",
+              height: "",
+              age: "",
+              targetType: "",
+              targetCalories: "1000",
+              targetProtein: "1000",
+              targetCarbs: "1000",
+              targetFat: "1000",
+              targetWeight: "",
+              exercise: "",
+              birthdate: "",
+              allergies: "",
+              diseases: "",
+            });
+          navigation.navigate("Login");
+          // console.log(result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -24,22 +71,40 @@ export default function Register({ navigation }) {
 
           <Text style={styles.inputTitle}>Email</Text>
           <View style={{ margin: 20, alignItems: "center" }}>
-            <TextInput style={styles.input} placeholder="Email" />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              onChangeText={(text) => setEmail(text)}
+            />
           </View>
 
           <Text style={styles.inputTitle}>Name</Text>
           <View style={{ margin: 20, alignItems: "center" }}>
-            <TextInput style={styles.input} placeholder="Name" />
+            <TextInput
+              style={styles.input}
+              placeholder="Name"
+              onChangeText={(text) => setName(text)}
+            />
           </View>
 
           <Text style={styles.inputTitle}>Password</Text>
           <View style={{ margin: 20, alignItems: "center" }}>
-            <TextInput style={styles.input} placeholder="Password" />
+            <TextInput
+              secureTextEntry={true}
+              style={styles.input}
+              placeholder="Password"
+              onChangeText={(text) => setPassword(text)}
+            />
           </View>
 
           <Text style={styles.inputTitle}>Confirm Password</Text>
           <View style={{ margin: 20, alignItems: "center" }}>
-            <TextInput style={styles.input} placeholder="Password" />
+            <TextInput
+              secureTextEntry={true}
+              style={styles.input}
+              placeholder="Password"
+              onChangeText={(text) => setPassword2(text)}
+            />
           </View>
         </View>
 
@@ -57,7 +122,9 @@ export default function Register({ navigation }) {
               padding: 10,
               width: 400,
             }}
-            onPress={() => console.log("signup")}
+            onPress={() => {
+              onSignUp();
+            }}
           >
             <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>
               Sign Up

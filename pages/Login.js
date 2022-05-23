@@ -7,9 +7,26 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import firebase from "firebase";
 
 export default function Login({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onLogin = () => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((result) => {
+        console.log(result);
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -35,12 +52,21 @@ export default function Login({ navigation }) {
 
           <Text style={styles.inputTitle}>Email</Text>
           <View style={{ margin: 20, alignItems: "center" }}>
-            <TextInput style={styles.input} placeholder="Email" />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              onChangeText={(text) => setEmail(text)}
+            />
           </View>
 
           <Text style={styles.inputTitle}>Password</Text>
           <View style={{ margin: 20, alignItems: "center" }}>
-            <TextInput style={styles.input} placeholder="Password" />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry={true}
+              onChangeText={(text) => setPassword(text)}
+            />
           </View>
 
           <Text
@@ -65,7 +91,7 @@ export default function Login({ navigation }) {
               padding: 10,
               width: 400,
             }}
-            onPress={() => console.log("login")}
+            onPress={() => onLogin()}
           >
             <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>
               Log In
@@ -73,7 +99,7 @@ export default function Login({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <View
+        {/* <View
           style={{
             alignItems: "center",
             justifyContent: "center",
@@ -96,7 +122,7 @@ export default function Login({ navigation }) {
               Log In with Google
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ImageBackground>
     </View>
   );

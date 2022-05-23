@@ -10,12 +10,71 @@ import {
   ScrollView,
 } from "react-native";
 import * as Progress from "react-native-progress";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import RadioForm from "react-native-simple-radio-button";
+import firebase from "firebase";
 
 export default function Profile({ navigation }) {
-  const [type, setType] = useState(0);
+  const [user, setUser] = useState(null);
+  const [type, setType] = useState("");
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [exercise, setExercise] = useState("");
+  const [allergies, setAllergies] = useState("");
+  const [diseases, setDiseases] = useState("");
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          console.log(snapshot.data());
+          setUser(snapshot.data());
+          setAllergies(snapshot.data().allergies);
+          setDiseases(snapshot.data().diseases);
+          setExercise(snapshot.data().exercise);
+          setBirthdate(snapshot.data().birthdate);
+          setHeight(snapshot.data().height);
+          setWeight(snapshot.data().weight);
+          setType(snapshot.data().targetType);
+        } else {
+          console.log("does not exist");
+        }
+      });
+  }, []);
+
+  const onUpdate = () => {
+    setUser({
+      ...user,
+      gender: type,
+      weight,
+      height,
+      birthdate,
+      exercise,
+      allergies,
+      diseases,
+    });
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .update({
+        ...user,
+        gender: type,
+        weight: weight,
+        height: height,
+        birthdate: birthdate,
+        allergies: allergies,
+        exercise: exercise,
+        diseases: diseases,
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -54,7 +113,7 @@ export default function Profile({ navigation }) {
                     textAlign: "center",
                   }}
                 >
-                  Nama
+                  {user ? user.name : "Loading"}
                 </Text>
                 <Text
                   style={{
@@ -62,7 +121,7 @@ export default function Profile({ navigation }) {
                     textAlign: "center",
                   }}
                 >
-                  Alamat
+                  Jl. Ganesa No.10, Lb. Siliwangi, Kecamatan Coblong
                 </Text>
               </View>
             </View>
@@ -123,7 +182,11 @@ export default function Profile({ navigation }) {
                   Weight
                 </Text>
                 <View>
-                  <TextInput style={styles.input} placeholder="Weight" />
+                  <TextInput
+                    style={styles.input}
+                    defaultValue={user ? user.weight : "0"}
+                    onChangeText={(text) => setWeight(text)}
+                  />
                 </View>
               </View>
 
@@ -144,7 +207,11 @@ export default function Profile({ navigation }) {
                   Height
                 </Text>
                 <View>
-                  <TextInput style={styles.input} placeholder="Height" />
+                  <TextInput
+                    style={styles.input}
+                    defaultValue={user ? user.height : "0"}
+                    onChangeText={(text) => setHeight(text)}
+                  />
                 </View>
               </View>
 
@@ -165,7 +232,11 @@ export default function Profile({ navigation }) {
                   Birth Date
                 </Text>
                 <View>
-                  <TextInput style={styles.input} placeholder="YYYY/MM/DD" />
+                  <TextInput
+                    style={styles.input}
+                    defaultValue={user ? user.birthdate : "0"}
+                    onChangeText={(text) => setBirthdate(text)}
+                  />
                 </View>
               </View>
 
@@ -185,8 +256,11 @@ export default function Profile({ navigation }) {
                   Gender
                 </Text>
                 <RadioForm
-                  radio_props={[{ label: "Male			" }, { label: "Female" }]}
-                  initial={type}
+                  radio_props={[
+                    { label: "Male			", value: "male" },
+                    { label: "Female", value: "Female" },
+                  ]}
+                  initial={0}
                   formHorizontal={true}
                   labelHorizontal={true}
                   buttonColor={"black"}
@@ -219,7 +293,11 @@ export default function Profile({ navigation }) {
                 </Text>
                 <View style={{ flexDirection: "row" }}>
                   <View style={{ flex: 0.4 }}>
-                    <TextInput style={styles.input} placeholder="Number" />
+                    <TextInput
+                      style={styles.input}
+                      defaultValue={user ? user.exercise : "0"}
+                      onChangeText={(text) => setExercise(text)}
+                    />
                   </View>
                   <View
                     style={{
@@ -250,7 +328,11 @@ export default function Profile({ navigation }) {
                   Allergy
                 </Text>
                 <View>
-                  <TextInput style={styles.input} placeholder="Allergy" />
+                  <TextInput
+                    style={styles.input}
+                    defaultValue={user ? user.allergies : "0"}
+                    onChangeText={(text) => setAllergies(text)}
+                  />
                 </View>
               </View>
 
@@ -273,7 +355,8 @@ export default function Profile({ navigation }) {
                 <View>
                   <TextInput
                     style={styles.input}
-                    placeholder="Hereditary Disease"
+                    defaultValue={user ? user.diseases : "0"}
+                    onChangeText={(text) => setDiseases(text)}
                   />
                 </View>
               </View>
@@ -293,7 +376,7 @@ export default function Profile({ navigation }) {
                     padding: 10,
                     width: 400,
                   }}
-                  onPress={() => console.log("update")}
+                  onPress={() => onUpdate()}
                 >
                   <Text
                     style={{

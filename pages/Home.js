@@ -9,11 +9,30 @@ import {
   ScrollView,
 } from "react-native";
 import * as Progress from "react-native-progress";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import TodaysProgress from "../components/TodaysProgress";
+import firebase from "firebase";
 
 export default function Home({ navigation }) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          console.log(snapshot.data());
+          setUser(snapshot.data());
+        } else {
+          console.log("does not exist");
+        }
+      });
+  }, []);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -57,7 +76,7 @@ export default function Home({ navigation }) {
                     flex: 1,
                   }}
                 >
-                  Nama
+                  {user ? user.name : "Loading..."}
                 </Text>
                 <Text
                   style={{
@@ -66,7 +85,7 @@ export default function Home({ navigation }) {
                     flex: 1,
                   }}
                 >
-                  Alamat
+                  Jl. Ganesa No.10, Lb. Siliwangi, Kecamatan Coblong
                 </Text>
               </View>
             </View>
@@ -75,6 +94,7 @@ export default function Home({ navigation }) {
           {/* Body */}
           <View style={{ flex: 1 }}>
             {/* Box todays progress */}
+            {/* {user ? <TodaysProgress user={user} />: <View></View>} */}
             <TodaysProgress />
 
             <View
@@ -110,7 +130,12 @@ export default function Home({ navigation }) {
 
                 <View style={{ flex: 0.33 }}>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("Planning")}
+                    onPress={() =>
+                      navigation.navigate("Planning", {
+                        user,
+                        setUser,
+                      })
+                    }
                   >
                     <Image
                       source={require("../assets/icon/planning.png")}

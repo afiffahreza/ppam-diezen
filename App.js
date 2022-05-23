@@ -15,7 +15,22 @@ import Profile from "./pages/Profile";
 import Resto from "./pages/Resto";
 import Makanan from "./pages/Makanan";
 
+import * as firebase from "firebase";
+
 const Stack = createStackNavigator();
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC4LinMzTBupoywOB8MPvoEl5BINoUiHdw",
+  authDomain: "ppam-diezen.firebaseapp.com",
+  projectId: "ppam-diezen",
+  storageBucket: "ppam-diezen.appspot.com",
+  messagingSenderId: "491688459787",
+  appId: "1:491688459787:web:b8bc79e5598cb97d0bd10e",
+};
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 export default function App() {
   return (

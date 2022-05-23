@@ -8,12 +8,49 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import RadioForm from "react-native-simple-radio-button";
+import firebase from "firebase";
 
 export default function PlanTarget({ navigation }) {
-  const [type, setType] = useState(0);
+  const [type, setType] = useState("Ideal BMI");
+  const [weightTarget, setWeightTarget] = useState(0);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          console.log(snapshot.data());
+          setUser(snapshot.data());
+        } else {
+          console.log("does not exist");
+        }
+      });
+  }, []);
+
+  const onSave = () => {
+    console.log(user);
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .update({
+        ...user,
+        targetType: type,
+        targetWeight: weightTarget,
+      });
+    navigation.navigate("Home");
+    // console.log(weightTarget);
+    // console.log(type);
+    // navigation.navigate("Home");
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -122,9 +159,9 @@ export default function PlanTarget({ navigation }) {
               </Text>
               <RadioForm
                 radio_props={[
-                  { label: "Ideal BMI" },
-                  { label: "Lose Weight" },
-                  { label: "Gain Weight" },
+                  { label: "Ideal BMI", value: "Ideal BMI" },
+                  { label: "Lose Weight", value: "Lose Weight" },
+                  { label: "Gain Weight", value: "Gain Weight" },
                 ]}
                 initial={type}
                 formHorizontal={false}
@@ -158,7 +195,11 @@ export default function PlanTarget({ navigation }) {
                 Weight Target
               </Text>
               <View style={{}}>
-                <TextInput style={styles.input} placeholder="Weight" />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Weight"
+                  onChangeText={(text) => setWeightTarget(text)}
+                />
               </View>
             </View>
 
@@ -177,7 +218,7 @@ export default function PlanTarget({ navigation }) {
                   padding: 10,
                   width: 400,
                 }}
-                onPress={() => console.log("signup")}
+                onPress={() => onSave()}
               >
                 <Text
                   style={{ color: "white", fontSize: 20, textAlign: "center" }}

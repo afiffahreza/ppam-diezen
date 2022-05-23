@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import * as Progress from "react-native-progress";
 import React from "react";
 
-export default function TodaysProgressTrack({ navigation }) {
+export default function TodaysProgressTrack({ navigation, user }) {
   return (
     <View
       style={{

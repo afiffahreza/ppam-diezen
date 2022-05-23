@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "491688459787",
+    "project_id": "ppam-diezen",
+    "storage_bucket": "ppam-diezen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491688459787:android:f2171c4b21bcf5230bd10e",
+        "android_client_info": {
+          "package_name": "com.ppamdiezen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491688459787-ngq032ptnflfv6092nbdnae5ge9fl48i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCupiqRyTfjQrxDrr7TNrMtpx4oFM_CJ3U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491688459787-ngq032ptnflfv6092nbdnae5ge9fl48i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

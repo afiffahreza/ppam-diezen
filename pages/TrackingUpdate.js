@@ -8,163 +8,218 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import Navbar from "../components/Navbar";
-
-const TextOtomatis = ({ mode }) => {
-  if (mode === "otomatis") {
-    return <Text style={styles.topTextActive}>Otomatis</Text>;
-  } else {
-    return <Text style={styles.topText}>Otomatis</Text>;
-  }
-};
-
-const TextManual = ({ mode }) => {
-  if (mode === "manual") {
-    return <Text style={styles.topTextActive}>Manual</Text>;
-  } else {
-    return <Text style={styles.topText}>Manual</Text>;
-  }
-};
-
-const Deskripsi = ({ mode }) => {
-  if (mode === "otomatis") {
-    return (
-      <View style={{ width: 300, alignSelf: "center" }}>
-        <Text style={styles.desc}>
-          Pilih makananmu hari ini, informasi akan terisi otomatis
-        </Text>
-      </View>
-    );
-  } else
-    return (
-      <View style={{ width: 350, alignSelf: "center" }}>
-        <Text style={styles.desc}>
-          Masukkan informasi makananmu hari ini secara manual
-        </Text>
-      </View>
-    );
-};
-
-const FormTracker = ({ mode }) => {
-  if (mode === "manual") {
-    return (
-      <View>
-        <Text style={styles.inputTitle}>Nama Makanan</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput style={styles.input} placeholder="Nama Makanan" />
-        </View>
-
-        <Text style={styles.inputTitle}>Calories</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput style={styles.input} placeholder="Calories" />
-        </View>
-
-        <Text style={styles.inputTitle}>Carbo</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput style={styles.input} placeholder="Carbo" />
-        </View>
-
-        <Text style={styles.inputTitle}>Protein</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput style={styles.input} placeholder="Protein" />
-        </View>
-
-        <Text style={styles.inputTitle}>Fat</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput style={styles.input} placeholder="Fat" />
-        </View>
-
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFB900",
-            borderRadius: 20,
-            marginHorizontal: 100,
-            marginTop: 20,
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 20,
-              textAlign: "center",
-              padding: 10,
-            }}
-          >
-            Tambah
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  } else
-    return (
-      <View>
-        <Text style={styles.inputTitle}>Nama Makanan</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput style={styles.input} placeholder="Nama Makanan" />
-        </View>
-
-        <Text style={styles.inputTitle}>Calories</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput
-            editable={false}
-            style={styles.inputDisabled}
-            placeholder="Calories"
-          />
-        </View>
-
-        <Text style={styles.inputTitle}>Carbo</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput
-            editable={false}
-            style={styles.inputDisabled}
-            placeholder="Carbo"
-          />
-        </View>
-
-        <Text style={styles.inputTitle}>Protein</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput
-            editable={false}
-            style={styles.inputDisabled}
-            placeholder="Protein"
-          />
-        </View>
-
-        <Text style={styles.inputTitle}>Fat</Text>
-        <View style={{ margin: 10, alignItems: "center" }}>
-          <TextInput
-            editable={false}
-            style={styles.inputDisabled}
-            placeholder="Fat"
-          />
-        </View>
-
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFB900",
-            borderRadius: 20,
-            marginHorizontal: 100,
-            marginTop: 20,
-            padding: 10,
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 20,
-              textAlign: "center",
-            }}
-          >
-            Tambah
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-};
+import firebase from "firebase";
 
 export default function TrackingUpdate({ navigation }) {
   const [mode, setMode] = useState("otomatis");
+  const [calories, setCalories] = useState("0");
+  const [carb, setCarb] = useState("0");
+  const [prot, setProt] = useState("0");
+  const [fat, setFat] = useState("0");
+  const [user, setUser] = useState(null);
+
+  const TextOtomatis = ({ mode }) => {
+    if (mode === "otomatis") {
+      return <Text style={styles.topTextActive}>Otomatis</Text>;
+    } else {
+      return <Text style={styles.topText}>Otomatis</Text>;
+    }
+  };
+
+  const TextManual = ({ mode }) => {
+    if (mode === "manual") {
+      return <Text style={styles.topTextActive}>Manual</Text>;
+    } else {
+      return <Text style={styles.topText}>Manual</Text>;
+    }
+  };
+
+  const Deskripsi = ({ mode }) => {
+    if (mode === "otomatis") {
+      return (
+        <View style={{ width: 300, alignSelf: "center" }}>
+          <Text style={styles.desc}>
+            Pilih makananmu hari ini, informasi akan terisi otomatis
+          </Text>
+        </View>
+      );
+    } else
+      return (
+        <View style={{ width: 350, alignSelf: "center" }}>
+          <Text style={styles.desc}>
+            Masukkan informasi makananmu hari ini secara manual
+          </Text>
+        </View>
+      );
+  };
+
+  const onSave = () => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .update({
+        ...user,
+        calories: calories,
+        carb: carb,
+        prot: prot,
+        fat: fat,
+      });
+    navigation.navigate("Home");
+  };
+
+  const FormTracker = ({ mode }) => {
+    if (mode === "manual") {
+      return (
+        <View>
+          <Text style={styles.inputTitle}>Nama Makanan</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput style={styles.input} placeholder="Nama Makanan" />
+          </View>
+
+          <Text style={styles.inputTitle}>Calories</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput
+              style={styles.input}
+              placeholder="Calories"
+              // onChangeText={(text) => setCalories(text)}
+            />
+          </View>
+
+          <Text style={styles.inputTitle}>Carbo</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput
+              style={styles.input}
+              placeholder="Carbo"
+              // onChangeText={(text) => setCarb(text)}
+            />
+          </View>
+
+          <Text style={styles.inputTitle}>Protein</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput
+              style={styles.input}
+              placeholder="Protein"
+              // onChangeText={(text) => setProt(text)}
+            />
+          </View>
+
+          <Text style={styles.inputTitle}>Fat</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput
+              style={styles.input}
+              placeholder="Fat"
+              // onChangeText={(text) => setFat(text)}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#FFB900",
+              borderRadius: 20,
+              marginHorizontal: 100,
+              marginTop: 20,
+            }}
+            onPress={() => onSave()}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: 20,
+                textAlign: "center",
+                padding: 10,
+              }}
+            >
+              Tambah
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else
+      return (
+        <View>
+          <Text style={styles.inputTitle}>Nama Makanan</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput style={styles.input} placeholder="Nama Makanan" />
+          </View>
+
+          <Text style={styles.inputTitle}>Calories</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput
+              editable={false}
+              style={styles.inputDisabled}
+              placeholder="Calories"
+            />
+          </View>
+
+          <Text style={styles.inputTitle}>Carbo</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput
+              editable={false}
+              style={styles.inputDisabled}
+              placeholder="Carbo"
+            />
+          </View>
+
+          <Text style={styles.inputTitle}>Protein</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput
+              editable={false}
+              style={styles.inputDisabled}
+              placeholder="Protein"
+            />
+          </View>
+
+          <Text style={styles.inputTitle}>Fat</Text>
+          <View style={{ margin: 10, alignItems: "center" }}>
+            <TextInput
+              editable={false}
+              style={styles.inputDisabled}
+              placeholder="Fat"
+            />
+          </View>
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#FFB900",
+              borderRadius: 20,
+              marginHorizontal: 100,
+              marginTop: 20,
+              padding: 10,
+            }}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: 20,
+                textAlign: "center",
+              }}
+            >
+              Tambah
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+  };
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          console.log(snapshot.data());
+          setUser(snapshot.data());
+        } else {
+          console.log("does not exist");
+        }
+      });
+  }, []);
+
   return (
     <View style={styles.container}>
       <ImageBackground

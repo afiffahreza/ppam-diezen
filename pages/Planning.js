@@ -7,12 +7,31 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TodaysProgressTrack from "../components/TodaysProgressTrack";
 import * as Progress from "react-native-progress";
 import Navbar from "../components/Navbar";
+import firebase from "firebase";
 
 export default function Planning({ navigation }) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists) {
+          console.log(snapshot.data());
+          setUser(snapshot.data());
+        } else {
+          console.log("does not exist");
+        }
+      });
+  }, []);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -61,7 +80,6 @@ export default function Planning({ navigation }) {
               </View>
             </View>
           </View>
-
           <View
             style={{
               flexDirection: "column",
@@ -108,12 +126,20 @@ export default function Planning({ navigation }) {
                       marginTop: 5,
                     }}
                   >
-                    55%
+                    {user && user.calorie
+                      ? user.calorie / user.targetCalorie
+                      : 0}
+                    %
                   </Text>
                 </View>
                 <View style={{ flex: 0.15 }}>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("PlanTarget")}
+                    onPress={() =>
+                      navigation.navigate("PlanTarget", {
+                        user,
+                        setUser,
+                      })
+                    }
                   >
                     <Image
                       source={require("../assets/icon/editpen.png")}
@@ -135,7 +161,9 @@ export default function Planning({ navigation }) {
               }}
             >
               <Progress.Bar
-                progress={0.55}
+                progress={
+                  user && user.calorie ? user.calorie / user.targetCalorie : 0
+                }
                 width={480}
                 height={20}
                 color="#FF8A00"
@@ -173,7 +201,18 @@ export default function Planning({ navigation }) {
                       fontWeight: "700",
                     }}
                   >
-                    22.3
+                    {/* {user
+                      ? Math.round(
+                          (parseInt(user.weight) * 10000) /
+                            (parseInt(user.height) * parseInt(user.height))
+                        )
+                      : 0} */}
+                    {user
+                      ? Math.round(
+                          (parseInt(user.weight) * 100000) /
+                            (parseInt(user.height) * parseInt(user.height))
+                        ) / 10
+                      : 0}
                   </Text>
                 </View>
               </View>
@@ -208,7 +247,7 @@ export default function Planning({ navigation }) {
                       fontWeight: "700",
                     }}
                   >
-                    Ideal BMI
+                    {user && user.targetType ? user.targetType : "Ideal BMI"}
                   </Text>
                 </View>
               </View>
@@ -243,7 +282,7 @@ export default function Planning({ navigation }) {
                       marginRight: 30,
                     }}
                   >
-                    65
+                    {user ? user.targetWeight : 0}
                   </Text>
                 </View>
               </View>
@@ -326,7 +365,7 @@ export default function Planning({ navigation }) {
                       fontWeight: "600",
                     }}
                   >
-                    22/05/22
+                    24/05/22
                   </Text>
                 </View>
               </View>
@@ -453,7 +492,7 @@ export default function Planning({ navigation }) {
                       fontWeight: "600",
                     }}
                   >
-                    22/05/22
+                    24/05/22
                   </Text>
                 </View>
               </View>
@@ -581,7 +620,7 @@ export default function Planning({ navigation }) {
                       fontWeight: "600",
                     }}
                   >
-                    Dinenr
+                    Dinner
                   </Text>
                 </View>
               </View>
