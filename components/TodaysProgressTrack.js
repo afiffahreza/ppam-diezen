@@ -39,7 +39,9 @@ export default function TodaysProgressTrack({ navigation }) {
             </Text>
           </View>
           <View style={{ flex: 0.2 }}>
-            <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("TrackingUpdate")}
+            >
               <Image
                 source={require("../assets/icon/plus.png")}
                 style={{

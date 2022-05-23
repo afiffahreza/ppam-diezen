@@ -20,47 +20,47 @@ export default function Tracking({ navigation }) {
         style={styles.imagebg}
         resizeMode="cover"
       >
-        <ScrollView>
-          <View style={{ height: 100, marginBottom: 20 }}>
+        <View style={{ height: 100, marginBottom: 20 }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "flex-start",
+              marginTop: 30,
+              marginLeft: -40,
+              flexDirection: "row",
+            }}
+          >
+            <View>
+              <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+                <Image
+                  source={require("../assets/icon/back.png")}
+                  style={{
+                    height: 40,
+                    resizeMode: "contain",
+                    marginLeft: 20,
+                    marginTop: 5,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
             <View
               style={{
-                flex: 1,
-                justifyContent: "flex-start",
-                marginTop: 30,
                 marginLeft: -40,
-                flexDirection: "row",
               }}
             >
-              <View>
-                <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-                  <Image
-                    source={require("../assets/icon/back.png")}
-                    style={{
-                      height: 40,
-                      resizeMode: "contain",
-                      marginLeft: 20,
-                      marginTop: 5,
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View
+              <Text
                 style={{
-                  marginLeft: -40,
+                  fontSize: 35,
+                  textAlign: "left",
+                  flex: 1,
                 }}
               >
-                <Text
-                  style={{
-                    fontSize: 35,
-                    textAlign: "left",
-                    flex: 1,
-                  }}
-                >
-                  Tracking
-                </Text>
-              </View>
+                Tracking
+              </Text>
             </View>
           </View>
+        </View>
+        <ScrollView>
           <View style={{}}>
             <TodaysProgressTrack navigation={navigation} />
           </View>

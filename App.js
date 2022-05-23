@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Tracking from "./pages/Tracking";
+import TrackingUpdate from "./pages/TrackingUpdate";
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,11 @@ export default function App() {
         <Stack.Screen
           name="Tracking"
           component={Tracking}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TrackingUpdate"
+          component={TrackingUpdate}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
