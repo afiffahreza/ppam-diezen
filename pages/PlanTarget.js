@@ -11,7 +11,6 @@ import {
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import RadioForm from "react-native-simple-radio-button";
-import { RadioButton } from "react-native-paper";
 
 export default function PlanTarget({ navigation }) {
   const [type, setType] = useState(0);

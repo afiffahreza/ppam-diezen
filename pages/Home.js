@@ -134,17 +134,25 @@ export default function Home({ navigation }) {
                 }}
               >
                 <View style={{ flex: 0.33 }}>
-                  <Image
-                    source={require("../assets/icon/makanan.png")}
-                    style={styles.icon}
-                  />
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Makanan")}
+                  >
+                    <Image
+                      source={require("../assets/icon/makanan.png")}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
                   <Text style={styles.iconText}>Makanan</Text>
                 </View>
                 <View style={{ flex: 0.33 }}>
-                  <Image
-                    source={require("../assets/icon/resto.png")}
-                    style={styles.icon}
-                  />
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Resto")}
+                  >
+                    <Image
+                      source={require("../assets/icon/resto.png")}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
                   <Text style={styles.iconText}>Resto</Text>
                 </View>
                 <View style={{ flex: 0.33 }}>

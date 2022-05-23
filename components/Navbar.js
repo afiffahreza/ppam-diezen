@@ -67,7 +67,9 @@ export default function Navbar({ navigation, currentPage }) {
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <HomeIcon currentPage={currentPage} />
         </TouchableOpacity>
-        <ProfileIcon currentPage={currentPage} />
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <ProfileIcon currentPage={currentPage} />
+        </TouchableOpacity>
       </View>
     </View>
   );

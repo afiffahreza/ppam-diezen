@@ -11,6 +11,9 @@ import Tracking from "./pages/Tracking";
 import TrackingUpdate from "./pages/TrackingUpdate";
 import Planning from "./pages/Planning";
 import PlanTarget from "./pages/PlanTarget";
+import Profile from "./pages/Profile";
+import Resto from "./pages/Resto";
+import Makanan from "./pages/Makanan";
 
 const Stack = createStackNavigator();
 
@@ -56,6 +59,21 @@ export default function App() {
         <Stack.Screen
           name="PlanTarget"
           component={PlanTarget}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Resto"
+          component={Resto}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Makanan"
+          component={Makanan}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
